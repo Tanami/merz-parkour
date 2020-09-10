@@ -54,17 +54,22 @@ public void SetPlayerClassname(int client, int style) {
     Shavit_GetStyleStrings(style, sSpecialString, sSpecial, 32);
     
     if(IsPlayerAlive(client) && IsValidClient(client)) {
-        if(StrContains(sSpecial, "parkour", false) == -1)
+        if(StrContains(sSpecial, "parkour", false) == -1) {
             SetEntPropString(client, Prop_Data, "m_iClassname", "player", 0);
-        else
+        }
+        else {
             SetEntPropString(client, Prop_Data, "m_iClassname", "parkour", 0);
+            // ClientCommand(client, "playgamesound ambient/3dmeagle.wav");
+        }
     }
 }
+
 public void Shavit_OnStyleChanged(int client, int oldstyle, int newstyle, int track, bool manual)
 {
     SetPlayerClassname(client, newstyle);
 }
-public void Shavit_OnLeaveZone(int client, int type, int track, int id, int entity, int data)
+
+public void Shavit_OnLeaveZone(int client, int type, int track, int id, int entity)
 {
     SetPlayerClassname(client, Shavit_GetBhopStyle(client));
 }
@@ -73,7 +78,7 @@ public Action Shavit_OnSave(int client)
 {
     g_flLastBoost[client] = GetEngineTime() - g_flNextBoost[client] + BOOST_COOLDOWN;
     g_flLastWallJump[client] = GetEngineTime() - g_flNextBoost[client] + WALLJUMP_COOLDOWN;
-        return Plugin_Continue;
+    return Plugin_Continue;
 }
 
 public Action Shavit_OnTeleport (int client)
@@ -122,7 +127,7 @@ public Action Shavit_OnUserCmdPre(int client, int &buttons, int &impulse, float 
             
             
             TeleportEntity( client, NULL_VECTOR, NULL_VECTOR, velocity );
-            
+            ClientCommand(client, "playgamesound weapons/flashbang/grenade_hit1.wav");
             
             g_flNextWallJump[client] = GetEngineTime() + WALLJUMP_COOLDOWN;
         }
@@ -145,6 +150,7 @@ public Action Shavit_OnUserCmdPre(int client, int &buttons, int &impulse, float 
         }
         
         TeleportEntity( client, NULL_VECTOR, NULL_VECTOR, velocity );
+        ClientCommand(client, "playgamesound weapons/grenade/tick1.wav");
         
         g_flNextBoost[client] = GetEngineTime() + BOOST_COOLDOWN;
     }
