@@ -16,6 +16,10 @@
 
 #define BOOST 500.0
 
+#define WALLJUMP_COOLDOWN 0.5
+
+#define BOOST_COOLDOWN 3
+
 
 float g_flNextWallJump[MAXPLAYERS+1];
 float g_flNextBoost[MAXPLAYERS+1];
@@ -67,15 +71,15 @@ public void Shavit_OnLeaveZone(int client, int type, int track, int id, int enti
 
 public Action Shavit_OnSave(int client)
 {
-    g_flLastBoost[client] = GetEngineTime() - g_flNextBoost[client] + 3.0;
-    g_flLastWallJump[client] = GetEngineTime() - g_flNextBoost[client] + 0.5;
+    g_flLastBoost[client] = GetEngineTime() - g_flNextBoost[client] + BOOST_COOLDOWN;
+    g_flLastWallJump[client] = GetEngineTime() - g_flNextBoost[client] + WALLJUMP_COOLDOWN;
         return Plugin_Continue;
 }
 
 public Action Shavit_OnTeleport (int client)
 {
-    g_flNextBoost[client] = GetEngineTime() + (3.0 - g_flLastBoost[client]);
-    g_flNextWallJump[client] = GetEngineTime() + (0.5 - g_flLastBoost[client]);
+    g_flNextBoost[client] = GetEngineTime() + (BOOST_COOLDOWN - g_flLastBoost[client]);
+    g_flNextWallJump[client] = GetEngineTime() + (WALLJUMP_COOLDOWN - g_flLastBoost[client]);
     return Plugin_Continue;
 }
 
@@ -120,7 +124,7 @@ public Action Shavit_OnUserCmdPre(int client, int &buttons, int &impulse, float 
             TeleportEntity( client, NULL_VECTOR, NULL_VECTOR, velocity );
             
             
-            g_flNextWallJump[client] = GetEngineTime() + 0.5;
+            g_flNextWallJump[client] = GetEngineTime() + WALLJUMP_COOLDOWN;
         }
     }
     
@@ -142,7 +146,7 @@ public Action Shavit_OnUserCmdPre(int client, int &buttons, int &impulse, float 
         
         TeleportEntity( client, NULL_VECTOR, NULL_VECTOR, velocity );
         
-        g_flNextBoost[client] = GetEngineTime() + 3.0;
+        g_flNextBoost[client] = GetEngineTime() + BOOST_COOLDOWN;
     }
     
     return Plugin_Continue;
