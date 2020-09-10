@@ -1,4 +1,8 @@
 # merz-parkour
-Parkour mode for Shavit's Bunnyhop Timer.
+Parkour mode for Shavit's Bunnyhop Timer, based on one by KiD Fearless.
 
-Supports checkpoints and free play.
+Has:
+ - checkpoints
+ - free roam
+ - "nowalljump" surfaces
+ - sets targetname
